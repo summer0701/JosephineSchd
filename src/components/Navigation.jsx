@@ -38,11 +38,6 @@ function Navigation() {
               📚 자료실
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/admin" className={`nav-link ${isActive("/admin")}`}>
-              🔐 관리자
-            </Link>
-          </li>
         </ul>
       </div>
     </nav>
