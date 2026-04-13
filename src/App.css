@@ -1,0 +1,253 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 60px 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.title {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.main-content {
+  padding: 50px 30px;
+}
+
+.welcome-section {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-left: 5px solid #667eea;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.welcome-text h2 {
+  color: #667eea;
+  font-size: 1.8em;
+  margin-bottom: 15px;
+}
+
+.welcome-text p {
+  color: #555;
+  font-size: 1.05em;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+}
+
+.calendar-section {
+  text-align: center;
+  animation: fadeIn 0.6s ease-out 0.4s both;
+}
+
+.calendar-title {
+  color: #667eea;
+  font-size: 1.8em;
+  margin-bottom: 30px;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* React-Calendar 커스타이징 */
+.react-calendar {
+  border: none !important;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  padding: 20px !important;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: white;
+}
+
+.react-calendar__tile {
+  border-radius: 10px;
+  padding: 12px 0 !important;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
+}
+
+.react-calendar__tile:hover {
+  background: #f0f0f0 !important;
+  transform: scale(1.05);
+}
+
+.react-calendar__tile--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.react-calendar__tile--now {
+  background: rgba(102, 126, 234, 0.15) !important;
+  border-radius: 10px;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 20px !important;
+}
+
+.react-calendar__navigation button {
+  color: #667eea !important;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.react-calendar__navigation button:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  border-radius: 8px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: #667eea;
+  font-weight: 600;
+  abbr {
+    text-decoration: none;
+  }
+}
+
+.selected-date {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.selected-date p {
+  color: #667eea;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.selected-date strong {
+  color: #764ba2;
+  font-weight: 700;
+}
+
+.footer {
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border-top: 2px solid rgba(102, 126, 234, 0.2);
+  margin-top: 40px;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 1.1em;
+  letter-spacing: 0.5px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .subtitle {
+    font-size: 0.95em;
+  }
+
+  .main-content {
+    padding: 30px 20px;
+  }
+
+  .welcome-section {
+    padding: 20px;
+  }
+
+  .welcome-text h2 {
+    font-size: 1.5em;
+  }
+
+  .calendar-wrapper {
+    padding: 0 -10px;
+  }
+
+  .react-calendar {
+    width: 100% !important;
+    padding: 15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 40px 20px;
+  }
+
+  .title {
+    font-size: 1.6em;
+  }
+
+  .main-content {
+    padding: 20px 15px;
+  }
+
+  .welcome-section {
+    border-left-width: 3px;
+    padding: 15px;
+  }
+
+  .react-calendar__tile {
+    padding: 8px 0 !important;
+    font-size: 0.8em;
+  }
+}
