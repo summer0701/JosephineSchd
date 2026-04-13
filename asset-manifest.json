@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "./static/js/main.dfc1639b.js",
-    "index.html": "./index.html",
-    "main.dfc1639b.js.map": "./static/js/main.dfc1639b.js.map"
+    "main.js": "/JosephineSchd/static/js/main.dfc1639b.js",
+    "index.html": "/JosephineSchd/index.html",
+    "main.dfc1639b.js.map": "/JosephineSchd/static/js/main.dfc1639b.js.map"
   },
   "entrypoints": [
     "static/js/main.dfc1639b.js"
