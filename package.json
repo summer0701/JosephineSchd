@@ -2,7 +2,7 @@
   "name": "react-name-input",
   "version": "1.0.0",
   "description": "Simple React app for name input",
-  "homepage": ".",
+  "homepage": "https://summer0701.github.io/JosephineSchd/",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
