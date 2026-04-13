@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function App() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   return (
     <div>
