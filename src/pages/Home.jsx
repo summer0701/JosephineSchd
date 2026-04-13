@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
 function Home() {
+  const navigate = useNavigate();
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState([]);
@@ -23,6 +25,7 @@ function Home() {
 
         if (data.table && data.table.rows) {
           const processedEvents = [];
+          let eventId = 0;
 
           data.table.rows.forEach((row) => {
             const title = row.c[0]?.v || "";
@@ -31,6 +34,7 @@ function Home() {
             const endTime = row.c[3]?.f || "";
             const participants = row.c[4]?.v || "";
             const repeatInfo = row.c[5]?.v || "";
+            const scheduleTable = row.c[6]?.v || ""; // 스케줄표 추가
 
             // 날짜 파싱 (YYYYMMDD 형식)
             const year = parseInt(dateStr.substring(0, 4));
@@ -49,25 +53,31 @@ function Home() {
 
                 if (isMatchingRepeatDay(checkDate, repeatInfo)) {
                   processedEvents.push({
+                    id: eventId,
                     title,
                     date: new Date(checkDate),
                     startTime,
                     endTime,
                     participants,
                     repeatInfo,
+                    scheduleTable,
                   });
+                  eventId++;
                 }
               }
             } else {
               // 반복 없음
               processedEvents.push({
+                id: eventId,
                 title,
                 date: baseDate,
                 startTime,
                 endTime,
                 participants,
                 repeatInfo: "없음",
+                scheduleTable,
               });
+              eventId++;
             }
           });
 
@@ -165,8 +175,13 @@ function Home() {
           {selectedDateEvents.length > 0 && (
             <div className="events-list">
               <h3>📌 예정된 강의</h3>
-              {selectedDateEvents.map((event, index) => (
-                <div key={index} className="event-item">
+              {selectedDateEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className="event-item"
+                  onClick={() => navigate(`/schedule/${event.id}`)}
+                  style={{ cursor: "pointer" }}
+                >
                   <h4>{event.title}</h4>
                   <p>
                     <strong>시간:</strong> {event.startTime} ~ {event.endTime}

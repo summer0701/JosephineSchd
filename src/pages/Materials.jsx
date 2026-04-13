@@ -1,127 +1,230 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Materials() {
-  const [materials] = useState([
-    {
-      id: 1,
-      title: "기초 영문법 정리",
-      description: "초급자를 위한 기본 영문법 자료",
-      category: "문법",
-      date: "2024-04-10",
-      type: "PDF",
-    },
-    {
-      id: 2,
-      title: "daily conversation 패턴",
-      description: "일상 회화에서 자주 쓰는 표현들",
-      category: "회화",
-      date: "2024-04-08",
-      type: "PDF",
-    },
-    {
-      id: 3,
-      title: "발음 가이드",
-      description: "정확한 발음을 위한 음성 가이드",
-      category: "발음",
-      date: "2024-04-05",
-      type: "Audio",
-    },
-    {
-      id: 4,
-      title: "영어 단어 1000개",
-      description: "일상생활에서 자주 사용하는 단어 모음",
-      category: "어휘",
-      date: "2024-04-01",
-      type: "PDF",
-    },
-    {
-      id: 5,
-      title: "리딩 연습 자료",
-      description: "초급~중급 영어 읽기 자료",
-      category: "리딩",
-      date: "2024-03-28",
-      type: "PDF",
-    },
-    {
-      id: 6,
-      title: "라이팅 연습",
-      description: "이메일, 편지 작성법 배우기",
-      category: "라이팅",
-      date: "2024-03-25",
-      type: "Document",
-    },
-  ]);
+  const [materials, setMaterials] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [tooltip, setTooltip] = useState({ visible: false, text: "", x: 0, y: 0 });
+  const [selectedWord, setSelectedWord] = useState("");
 
-  const [selectedCategory, setSelectedCategory] = useState("전체");
-  const categories = ["전체", "문법", "회화", "발음", "어휘", "리딩", "라이팅"];
+  // Google Sheets에서 자료 데이터 가져오기
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const sheetId = "1HJHLU3-61_eYIQaY9PMMXamt-WGYkDSDOtUJpGag5Ow";
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq`;
 
-  const filteredMaterials =
-    selectedCategory === "전체"
-      ? materials
-      : materials.filter((m) => m.category === selectedCategory);
+        const response = await fetch(url);
+        const text = await response.text();
 
-  const getTypeIcon = (type) => {
-    switch (type) {
-      case "PDF":
-        return "📄";
-      case "Audio":
-        return "🎵";
-      case "Document":
-        return "📝";
-      default:
-        return "📎";
+        // Google Visualization API 응답 파싱
+        const jsonStr = text.match(/\(({.*})\)/)[1];
+        const data = JSON.parse(jsonStr);
+
+        if (data.table && data.table.rows) {
+          const materialList = data.table.rows
+            .slice(1) // 헤더 제외
+            .map((row) => {
+              const title = row.c[0]?.v || "";
+              const description = row.c[1]?.v || "";
+              const link = row.c[2]?.v || "";
+
+              // YouTube URL 판별
+              let videoId = "";
+              let isArticle = false;
+
+              if (link.includes("youtube.com/shorts/")) {
+                videoId = link.split("youtube.com/shorts/")[1];
+              } else if (link.includes("youtu.be/")) {
+                videoId = link.split("youtu.be/")[1];
+              } else if (link.includes("youtube.com/watch?v=")) {
+                videoId = link.split("youtube.com/watch?v=")[1];
+              } else if (description.includes("기사") || !link.startsWith("http")) {
+                // 기사 타입 판별
+                isArticle = true;
+              }
+
+              return {
+                title: title.replace(/\n/g, " "),
+                description: description.replace(/\n/g, " "),
+                link,
+                videoId,
+                isArticle,
+                type: videoId ? "video" : "article",
+              };
+            })
+            .filter((item) => item.videoId || item.isArticle); // 유효한 아이템만 필터링
+
+          setMaterials(materialList);
+        }
+      } catch (error) {
+        console.error("자료 데이터 로드 오류:", error);
+      }
+    };
+
+    fetchMaterials();
+  }, []);
+
+  // 단어 번역 함수 (MyMemory API 사용 - 무료)
+  const translateWord = async (word) => {
+    try {
+      const response = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ko`
+      );
+      const data = await response.json();
+      return data.responseData.translatedText;
+    } catch (error) {
+      console.error("번역 오류:", error);
+      return "번역 불가";
     }
   };
+
+  // 단어 클릭 이벤트 핸들러
+  const handleWordClick = async (e, word) => {
+    if (!/^[a-zA-Z]+$/.test(word)) return; // 영어 단어만 처리
+
+    const translation = await translateWord(word);
+
+    const rect = e.target.getBoundingClientRect();
+    setTooltip({
+      visible: true,
+      text: translation,
+      x: rect.left,
+      y: rect.top - 40,
+    });
+    setSelectedWord(word);
+
+    // 3초 후 툴팁 사라짐
+    setTimeout(() => {
+      setTooltip({ ...tooltip, visible: false });
+    }, 3000);
+  };
+
+  // 텍스트를 단어 단위로 분할하여 클릭 가능하게 만들기
+  const renderClickableText = (text) => {
+    const words = text.split(/(\s+)/);
+    return words.map((word, idx) => {
+      if (word.match(/^\s+$/)) {
+        return <span key={idx}>{word}</span>;
+      }
+
+      // 구두점 제거
+      const cleanWord = word.replace(/[.,!?;:"'-]/g, "");
+      const punctuation = word.slice(cleanWord.length);
+
+      return (
+        <span
+          key={idx}
+          onClick={(e) => handleWordClick(e, cleanWord)}
+          className="clickable-word"
+          style={{ cursor: "pointer", color: "#667eea", fontWeight: 500 }}
+        >
+          {cleanWord}
+          {punctuation}
+        </span>
+      );
+    });
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? materials.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === materials.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const currentMaterial = materials[currentIndex];
 
   return (
     <main className="main-content">
       <div className="page-header">
         <h2>📚 자료실</h2>
-        <p>강의 학습에 도움이 될 다양한 자료들을 다운로드하세요.</p>
+        <p>강의 영상과 기사를 통해 영어를 배워보세요. 단어를 클릭하면 뜻이 나옵니다!</p>
       </div>
 
-      <div className="materials-container">
-        <div className="category-filter">
-          {categories.map((category) => (
-            <button
-              key={category}
-              className={`category-btn ${
-                selectedCategory === category ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory(category)}
+      {materials.length > 0 ? (
+        <div className="carousel-container">
+          {/* 툴팁 */}
+          {tooltip.visible && (
+            <div
+              className="tooltip"
+              style={{
+                position: "fixed",
+                left: `${tooltip.x}px`,
+                top: `${tooltip.y}px`,
+                zIndex: 1000,
+              }}
             >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        <div className="materials-grid">
-          {filteredMaterials.length > 0 ? (
-            filteredMaterials.map((material) => (
-              <div key={material.id} className="material-card">
-                <div className="material-header">
-                  <span className="material-type">
-                    {getTypeIcon(material.type)} {material.type}
-                  </span>
-                  <span className="material-category">{material.category}</span>
-                </div>
-                <h3>{material.title}</h3>
-                <p>{material.description}</p>
-                <div className="material-footer">
-                  <span className="material-date">
-                    📅 {new Date(material.date).toLocaleDateString("ko-KR")}
-                  </span>
-                  <button className="download-btn">📥 다운로드</button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-materials">
-              <p>해당 카테고리의 자료가 없습니다.</p>
+              <strong>{selectedWord}</strong>: {tooltip.text}
             </div>
           )}
+
+          <div className="carousel-wrapper">
+            <button className="carousel-btn prev-btn" onClick={handlePrev}>
+              ❮
+            </button>
+
+            <div className="carousel-content">
+              {/* 영상 타입 */}
+              {currentMaterial.type === "video" && (
+                <>
+                  <div className="video-wrapper">
+                    <iframe
+                      width="100%"
+                      height="400"
+                      src={`https://www.youtube.com/embed/${currentMaterial.videoId}`}
+                      title={currentMaterial.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+
+                  <div className="video-info">
+                    <h3>{currentMaterial.title}</h3>
+                    <p>{currentMaterial.description}</p>
+                  </div>
+                </>
+              )}
+
+              {/* 기사 타입 */}
+              {currentMaterial.type === "article" && (
+                <div className="article-container">
+                  <h3 className="article-title">{currentMaterial.title}</h3>
+                  <div className="article-content">
+                    {renderClickableText(currentMaterial.description)}
+                  </div>
+                  <p className="article-hint">💡 단어를 클릭하면 뜻이 나옵니다!</p>
+                </div>
+              )}
+
+              <div className="carousel-indicators">
+                {materials.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`indicator ${index === currentIndex ? "active" : ""}`}
+                    onClick={() => setCurrentIndex(index)}
+                  ></button>
+                ))}
+              </div>
+            </div>
+
+            <button className="carousel-btn next-btn" onClick={handleNext}>
+              ❯
+            </button>
+          </div>
+
+          <div className="carousel-counter">
+            {currentIndex + 1} / {materials.length}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="loading">로딩 중...</div>
+      )}
 
       <footer className="footer">
         <p>✨ 매 순간을 소중히 ✨</p>

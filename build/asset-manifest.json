@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/JosephineSchd/static/css/main.958f77e5.css",
-    "main.js": "/JosephineSchd/static/js/main.19564f2b.js",
+    "main.css": "/JosephineSchd/static/css/main.8bb37a5a.css",
+    "main.js": "/JosephineSchd/static/js/main.06a573bc.js",
     "index.html": "/JosephineSchd/index.html",
-    "main.958f77e5.css.map": "/JosephineSchd/static/css/main.958f77e5.css.map",
-    "main.19564f2b.js.map": "/JosephineSchd/static/js/main.19564f2b.js.map"
+    "main.8bb37a5a.css.map": "/JosephineSchd/static/css/main.8bb37a5a.css.map",
+    "main.06a573bc.js.map": "/JosephineSchd/static/js/main.06a573bc.js.map"
   },
   "entrypoints": [
-    "static/css/main.958f77e5.css",
-    "static/js/main.19564f2b.js"
+    "static/css/main.8bb37a5a.css",
+    "static/js/main.06a573bc.js"
   ]
 }

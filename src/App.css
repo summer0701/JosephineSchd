@@ -517,7 +517,621 @@ body {
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 
-/* ========== 이벤트 표시 스타일 ========== */
+/* ========== 캐로셀 스타일 ========== */
+.carousel-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  padding: 30px;
+  margin-bottom: 30px;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.carousel-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.carousel-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.carousel-btn:active {
+  transform: scale(0.95);
+}
+
+.carousel-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.video-wrapper {
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  aspect-ratio: 16 / 9;
+}
+
+.video-wrapper iframe {
+  display: block;
+  height: 100%;
+}
+
+.video-info {
+  margin-bottom: 20px;
+}
+
+.video-info h3 {
+  color: #333;
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+
+.video-info p {
+  color: #666;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.carousel-indicators {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ddd;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator:hover {
+  background: #bbb;
+}
+
+.indicator.active {
+  background: #667eea;
+  width: 30px;
+  border-radius: 6px;
+}
+
+.carousel-counter {
+  text-align: center;
+  color: #667eea;
+  font-weight: 600;
+  margin-top: 15px;
+  font-size: 0.95em;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 1.1em;
+}
+
+/* ========== 기사 스타일 ========== */
+.article-container {
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  line-height: 1.8;
+}
+
+.article-title {
+  color: #333;
+  font-size: 1.4em;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.article-content {
+  color: #555;
+  font-size: 1em;
+  line-height: 1.8;
+  margin-bottom: 15px;
+  word-break: break-word;
+}
+
+.article-content .clickable-word {
+  cursor: pointer;
+  color: #667eea;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  transition: all 0.2s ease;
+}
+
+.article-content .clickable-word:hover {
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+.article-hint {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* ========== 툴팁 스타일 ========== */
+.tooltip {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  white-space: nowrap;
+  font-size: 0.9em;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  animation: tooltipIn 0.3s ease-out;
+  pointer-events: none;
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== 스케줄 상세 페이지 ========== */
+.schedule-detail {
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-button:hover {
+  transform: translateX(-3px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.back-button:active {
+  transform: translateX(-1px);
+}
+
+.detail-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+
+.detail-header h2 {
+  font-size: 2em;
+  margin: 0;
+}
+
+.schedule-table-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  padding: 30px;
+  margin-bottom: 40px;
+  overflow-x: auto;
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.05em;
+}
+
+.schedule-table thead {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+}
+
+.schedule-table th {
+  padding: 20px;
+  text-align: left;
+  font-weight: 700;
+  color: #667eea;
+  border-bottom: 2px solid #667eea;
+}
+
+.schedule-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.schedule-table tbody tr:hover {
+  background: rgba(102, 126, 234, 0.05);
+  transition: background 0.2s ease;
+}
+
+.schedule-table td.label {
+  font-weight: 600;
+  color: #667eea;
+  width: 150px;
+}
+
+.all-schedule-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  padding: 30px;
+  animation: fadeIn 0.6s ease-out 0.4s both;
+}
+
+.all-schedule-container h3 {
+  color: #333;
+  font-size: 1.5em;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.all-schedules-table {
+  overflow-x: auto;
+}
+
+.schedule-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.schedule-list-table thead {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+}
+
+.schedule-list-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 700;
+  color: #667eea;
+  border-bottom: 2px solid #667eea;
+}
+
+.schedule-list-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: #666;
+}
+
+.schedule-list-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.schedule-list-table tbody tr:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.schedule-list-table tbody tr.active-row {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .detail-header h2 {
+    font-size: 1.5em;
+  }
+
+  .schedule-table-container,
+  .all-schedule-container {
+    padding: 20px;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    padding: 12px;
+    font-size: 0.9em;
+  }
+
+  .schedule-table td.label {
+    width: 100px;
+  }
+
+  .schedule-list-table th,
+  .schedule-list-table td {
+    padding: 10px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .detail-header {
+    padding: 20px;
+  }
+
+  .detail-header h2 {
+    font-size: 1.2em;
+  }
+
+  .schedule-table-container {
+    padding: 15px;
+  }
+
+  .schedule-table {
+    font-size: 0.85em;
+  }
+
+  .schedule-table th,
+  .schedule-table td {
+    padding: 10px;
+  }
+
+  .schedule-list-table {
+    font-size: 0.8em;
+  }
+
+  .schedule-list-table th,
+  .schedule-list-table td {
+    padding: 8px;
+  }
+}
+
+/* ========== 스케줄 상세 정보 ========== */
+.schedule-details-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  padding: 30px;
+  margin-top: 30px;
+  animation: fadeIn 0.6s ease-out 0.6s both;
+}
+
+.schedule-details-container h3 {
+  color: #333;
+  font-size: 1.5em;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 10px;
+}
+
+.schedule-details-content {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  font-size: 1em;
+  line-height: 1.8;
+  color: #555;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.schedule-details-content p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.schedule-details-content p:first-child {
+  margin-top: 0;
+}
+
+.schedule-details-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== 아름다운 스케줄 테이블 ========== */
+.schedule-details-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  background: white;
+}
+
+.beautiful-schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1em;
+}
+
+.beautiful-schedule-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.beautiful-schedule-table th {
+  padding: 16px 18px;
+  text-align: center;
+  font-weight: 700;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #764ba2;
+  letter-spacing: 0.5px;
+}
+
+.beautiful-schedule-table td {
+  padding: 14px 18px;
+  text-align: center;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.beautiful-schedule-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.beautiful-schedule-table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.beautiful-schedule-table tbody tr:nth-child(odd) {
+  background: rgba(102, 126, 234, 0.02);
+}
+
+.beautiful-schedule-table tbody tr:nth-child(even) {
+  background: white;
+}
+
+.beautiful-schedule-table tbody tr:last-child td {
+  border-bottom: 2px solid #667eea;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .beautiful-schedule-table th,
+  .beautiful-schedule-table td {
+    padding: 12px;
+    font-size: 0.92em;
+  }
+
+  .beautiful-schedule-table th {
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 480px) {
+  .beautiful-schedule-table {
+    font-size: 0.85em;
+  }
+
+  .beautiful-schedule-table th,
+  .beautiful-schedule-table td {
+    padding: 10px 8px;
+  }
+
+  .schedule-details-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-details-container {
+    padding: 20px;
+  }
+
+  .schedule-details-container h3 {
+    font-size: 1.2em;
+  }
+
+  .schedule-details-content {
+    padding: 15px;
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-details-container {
+    padding: 15px;
+  }
+
+  .schedule-details-container h3 {
+    font-size: 1.1em;
+  }
+
+  .schedule-details-content {
+    padding: 12px;
+    font-size: 0.9em;
+    line-height: 1.6;
+  }
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 20px;
+  }
+
+  .carousel-wrapper {
+    gap: 10px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+  }
+
+  .video-wrapper {
+    height: 250px;
+  }
+
+  .video-info h3 {
+    font-size: 1.1em;
+  }
+
+  .video-info p {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-container {
+    padding: 15px;
+  }
+
+  .carousel-wrapper {
+    gap: 8px;
+  }
+
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1em;
+  }
+
+  .video-wrapper {
+    height: 200px;
+  }
+
+  .video-info h3 {
+    font-size: 1em;
+  }
+
+  .video-info p {
+    font-size: 0.85em;
+  }
+}
 .react-calendar__tile.event-day {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2)) !important;
   border: 2px solid rgba(102, 126, 234, 0.4);
@@ -569,6 +1183,8 @@ body {
 .event-item:hover {
   transform: translateX(5px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  cursor: pointer;
 }
 
 .event-item:last-child {

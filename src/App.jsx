@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import DemoLecture from "./pages/DemoLecture";
 import Materials from "./pages/Materials";
 import Admin from "./pages/Admin";
+import ScheduleDetail from "./pages/ScheduleDetail";
 import "./App.css";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/demo-lecture" element={<DemoLecture />} />
           <Route path="/materials" element={<Materials />} />
+          <Route path="/schedule/:scheduleIndex" element={<ScheduleDetail />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
