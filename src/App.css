@@ -128,6 +128,7 @@ body {
   padding: 12px 0 !important;
   font-size: 0.95em;
   transition: all 0.3s ease;
+  color: #333 !important;
 }
 
 .react-calendar__tile:hover {
@@ -145,6 +146,11 @@ body {
 .react-calendar__tile--now {
   background: rgba(102, 126, 234, 0.15) !important;
   border-radius: 10px;
+}
+
+/* 토요일 빨간색 제거 */
+.react-calendar__tile--weekend {
+  color: #333 !important;
 }
 
 .react-calendar__navigation {
@@ -356,6 +362,18 @@ body {
   transform: translateY(0);
 }
 
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #999 0%, #666 100%);
+  transform: none;
+}
+
+.submit-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 /* ========== 자료실 스타일 ========== */
 .materials-container {
   animation: fadeIn 0.6s ease-out 0.2s both;
@@ -497,6 +515,82 @@ body {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+}
+
+/* ========== 이벤트 표시 스타일 ========== */
+.react-calendar__tile.event-day {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2)) !important;
+  border: 2px solid rgba(102, 126, 234, 0.4);
+  font-weight: 600;
+  color: #667eea;
+}
+
+.react-calendar__tile.event-day:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3)) !important;
+  border-color: rgba(102, 126, 234, 0.6);
+}
+
+/* 토요일 제외 (별도 스타일 없음) */
+.react-calendar__tile.saturday {
+  color: #999;
+}
+
+/* 이벤트 목록 */
+.events-list {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.05),
+    rgba(118, 75, 162, 0.05)
+  );
+  border-left: 4px solid #667eea;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.events-list h3 {
+  color: #667eea;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.event-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 3px solid #764ba2;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.event-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.event-item:last-child {
+  margin-bottom: 0;
+}
+
+.event-item h4 {
+  color: #333;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.event-item p {
+  color: #666;
+  font-size: 0.95em;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.event-item p strong {
+  color: #667eea;
+  font-weight: 600;
 }
 
 .error-message {
