@@ -12,13 +12,13 @@ function Navigation() {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        <Link to="/" className="nav-logo">
+        <Link to="/home" className="nav-logo">
           🌸 조세핀의 다락방
         </Link>
 
         <ul className="nav-menu">
           <li className="nav-item">
-            <Link to="/" className={`nav-link ${isActive("/")}`}>
+            <Link to="/home" className={`nav-link ${isActive("/home")}`}>
               🏠 홈
             </Link>
           </li>
