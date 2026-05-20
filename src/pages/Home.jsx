@@ -170,6 +170,11 @@ function Home() {
     return sentences[currentIndex] || "";
   }, [sentences, currentIndex]);
 
+  const isMobileDevice = useMemo(
+    () => /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    []
+  );
+
   useEffect(() => {
     const savedUserName = localStorage.getItem(LOGIN_USER_KEY);
     const savedClassName = localStorage.getItem(LOGIN_CLASS_KEY);
@@ -334,10 +339,12 @@ function Home() {
       return;
     }
 
-    const canRecordAudio = await startAudioRecording();
+    if (!isMobileDevice) {
+      const canRecordAudio = await startAudioRecording();
 
-    if (!canRecordAudio) {
-      return;
+      if (!canRecordAudio) {
+        return;
+      }
     }
 
     const recognition = new SpeechRecognition();
