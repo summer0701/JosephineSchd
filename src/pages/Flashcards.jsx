@@ -223,6 +223,35 @@ const getSpokenCompositionAnswer = (wordBank, spokenText) => {
   }, []);
 };
 
+const getMissingWords = (targetText, answerText) => {
+  const answerFrequency = getWordFrequency(getWords(answerText));
+
+  return getWords(targetText).filter((word) => {
+    if (!answerFrequency[word]) {
+      return true;
+    }
+
+    answerFrequency[word] -= 1;
+    return false;
+  });
+};
+
+const getWrongAnalysis = (cards, phase) => {
+  const wrongCards = cards.filter(
+    (card) => card.phase === phase && (!card.passed || card.skipped)
+  );
+
+  if (wrongCards.length === 0) {
+    return "";
+  }
+
+  const missingWords = wrongCards.flatMap((card) =>
+    getMissingWords(card.english, card.lastSpokenText || "")
+  );
+
+  return [...new Set(missingWords)].join(", ");
+};
+
 const getOrderedSimilarity = (targetWords, spokenWords) => {
   const table = Array.from({ length: targetWords.length + 1 }, () =>
     Array(spokenWords.length + 1).fill(0)
@@ -512,7 +541,7 @@ const fetchStudentXp = async (studentName, className) => {
   };
 };
 
-const saveXp = async ({ studentName, className, sessionId, earnedXp, result }) => {
+const saveXp = async ({ studentName, className, sessionId, earnedXp, result, cards }) => {
   const paidSessions = JSON.parse(localStorage.getItem("speakRankPaidSessions") || "[]");
   if (paidSessions.includes(sessionId)) {
     return { ok: true, duplicate: true, message: "이미 지급된 학습 세션입니다." };
@@ -557,6 +586,7 @@ const saveXp = async ({ studentName, className, sessionId, earnedXp, result }) =
     overall_average_rate: result.overallAverage,
     final_score: item.result.finalScore,
     earned_xp: item.type === "t2-translate" ? earnedXp : 0,
+    wrong: getWrongAnalysis(cards || [], item.type),
   }));
 
   await Promise.all(
@@ -797,6 +827,7 @@ function Flashcards() {
       sessionId: sessionIdRef.current,
       earnedXp: finalResults.earnedXp,
       result: finalResults,
+      cards: sourceCards,
     });
 
     setXpSaveResult(saveResult);

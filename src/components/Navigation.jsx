@@ -18,11 +18,6 @@ function Navigation() {
 
         <ul className="nav-menu">
           <li className="nav-item">
-            <Link to="/home" className={`nav-link ${isActive("/home")}`}>
-              🏠 홈
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link
               to="/demo-lecture"
               className={`nav-link ${isActive("/demo-lecture")}`}
@@ -32,10 +27,10 @@ function Navigation() {
           </li>
           <li className="nav-item">
             <Link
-              to="/materials"
-              className={`nav-link ${isActive("/materials")}`}
+              to="/growth-stats"
+              className={`nav-link ${isActive("/growth-stats")}`}
             >
-              📚 자료실
+              📈 나의 성장 통계
             </Link>
           </li>
           <li className="nav-item">

@@ -89,7 +89,7 @@ function DemoLecture() {
   };
 
   return (
-    <main className="main-content">
+    <main className="main-content demo-page">
       <div className="page-header">
         <h2>🎤 데모강의 신청</h2>
         <p>아래 양식을 작성하여 데모강의를 신청해주세요.</p>

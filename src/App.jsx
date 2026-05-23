@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import ScheduleDetail from "./pages/ScheduleDetail";
 import Login from "./pages/Login";
 import Flashcards from "./pages/Flashcards";
+import GrowthStats from "./pages/GrowthStats";
 import "./App.css";
 
 const LOGIN_USER_KEY = "josephineLoginUser";
@@ -21,11 +22,39 @@ function ProtectedLayout() {
   }
 
   if (location.pathname === "/home") {
-    return <Home />;
+    return (
+      <>
+        <Navigation />
+        <Home />
+      </>
+    );
   }
 
   if (location.pathname === "/flashcards") {
-    return <Flashcards />;
+    return (
+      <>
+        <Navigation />
+        <Flashcards />
+      </>
+    );
+  }
+
+  if (location.pathname === "/growth-stats") {
+    return (
+      <>
+        <Navigation />
+        <GrowthStats />
+      </>
+    );
+  }
+
+  if (location.pathname === "/demo-lecture") {
+    return (
+      <>
+        <Navigation />
+        <DemoLecture />
+      </>
+    );
   }
 
   return (
@@ -41,6 +70,7 @@ function ProtectedLayout() {
         <Route path="home" element={<Home />} />
         <Route path="demo-lecture" element={<DemoLecture />} />
         <Route path="materials" element={<Materials />} />
+        <Route path="growth-stats" element={<GrowthStats />} />
         <Route path="schedule/:scheduleIndex" element={<ScheduleDetail />} />
         <Route path="admin" element={<Admin />} />
       </Routes>
