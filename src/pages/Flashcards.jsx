@@ -202,6 +202,24 @@ const shuffleCompositionWords = (text, seedText) => {
   return shuffledWords;
 };
 
+const getSpokenCompositionAnswer = (wordBank, spokenText) => {
+  const availableWords = [...wordBank];
+  const spokenWords = getWords(spokenText);
+
+  return spokenWords.reduce((answer, spokenWord) => {
+    const matchedIndex = availableWords.findIndex(
+      (word) => normalizeText(word.text) === spokenWord
+    );
+
+    if (matchedIndex < 0) {
+      return answer;
+    }
+
+    const [matchedWord] = availableWords.splice(matchedIndex, 1);
+    return [...answer, matchedWord];
+  }, []);
+};
+
 const getOrderedSimilarity = (targetWords, spokenWords) => {
   const table = Array.from({ length: targetWords.length + 1 }, () =>
     Array(spokenWords.length + 1).fill(0)
@@ -855,6 +873,36 @@ function Flashcards() {
     }
   };
 
+  const applySpokenCompositionAnswer = (spokenText) => {
+    if (!currentCard || currentCard.phase !== "t2-translate") {
+      return;
+    }
+
+    const nextCompositionAnswer = getSpokenCompositionAnswer(
+      currentCard.wordBank || [],
+      spokenText
+    );
+
+    if (nextCompositionAnswer.length === 0) {
+      setStatusMessage("인식된 단어와 일치하는 단어가 없습니다. 다시 말해 주세요.");
+      return;
+    }
+
+    setCompositionAnswer(nextCompositionAnswer);
+    setCards((previousCards) =>
+      previousCards.map((card, index) =>
+        index === currentIndex
+          ? {
+              ...card,
+              compositionAnswer: nextCompositionAnswer,
+              lastSpokenText: nextCompositionAnswer.map((word) => word.text).join(" "),
+            }
+          : card
+      )
+    );
+    setStatusMessage("STT 인식 결과에 맞춰 단어를 자동 배치했습니다.");
+  };
+
   const addCompositionWord = (word) => {
     if (!word || compositionAnswer.some((answerWord) => answerWord.id === word.id)) {
       return;
@@ -906,10 +954,6 @@ function Flashcards() {
       return;
     }
 
-    if (currentCard.phase === "t2-translate") {
-      return;
-    }
-
     if (isAutoStart) {
       if (autoSttCardIdsRef.current.has(currentCard.id)) {
         return;
@@ -958,6 +1002,11 @@ function Flashcards() {
 
       if (!spokenText) {
         setStatusMessage("STT 인식에 실패했습니다. 다시 말하기 버튼을 눌러 주세요.");
+        return;
+      }
+
+      if (currentCard.phase === "t2-translate") {
+        applySpokenCompositionAnswer(spokenText);
         return;
       }
 
@@ -1340,6 +1389,14 @@ function Flashcards() {
         <div className="flashcard-actions">
           {currentCard?.phase === "t2-translate" ? (
             <>
+              <button
+                className="flashcard-secondary-button"
+                type="button"
+                onClick={startListening}
+                disabled={!currentCard || isListening || isSpeaking}
+              >
+                {isListening ? "듣는 중" : "말로 배열"}
+              </button>
               <button
                 className="flashcard-primary-button"
                 type="button"
