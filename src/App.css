@@ -2339,10 +2339,37 @@ body {
 }
 
 .flashcard-xp-status {
+  display: grid;
+  gap: 10px;
   margin: 18px 0;
   padding: 14px 16px;
   border-radius: 8px;
   font-weight: 900;
+}
+
+.flashcard-save-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce7f7;
+}
+
+.flashcard-save-progress span {
+  width: 42%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: #2563eb;
+  animation: flashcardSaveProgress 1.1s ease-in-out infinite;
+}
+
+@keyframes flashcardSaveProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(240%);
+  }
 }
 
 .flashcard-part-results {
@@ -2424,7 +2451,7 @@ body {
   color: #08764f;
 }
 
-.flashcard-xp-status.failed {
+.flashcard-xp-status.saving {
   background: #fff3e8;
   color: #a75000;
 }

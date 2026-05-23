@@ -8,7 +8,10 @@ const FLASHCARD_SHEET_ID = "1_JXlTJ-iBaKrxRrGJLf9-KUljk_xiGID3K8uZ2sjcEo";
 const XP_SHEET_ID = "1B3EHtBTg-uyolVGvJz0y5sP2Jj2NjGzR0nj17vLRsfY";
 const XP_UPDATE_ENDPOINT =
   process.env.REACT_APP_XP_UPDATE_ENDPOINT ||
-  "https://script.google.com/macros/s/AKfycbyStlfjhIgIUDdw20xKa-oEVMUICE3uvxRriQ8FEVOp8b5buYvjKWSHeSQwdyM8XFxP_w/exec";
+  "https://script.google.com/macros/s/AKfycbzaI8gGIQpdoKTj8gsVf19-fhXw9yMLEk03XAioA4kthbq__UXXL0zSBFVp4P6mu1ETPA/exec";
+const STATS_UPDATE_ENDPOINT =
+  process.env.REACT_APP_STATS_UPDATE_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwqRrcibIy_4Qwt6-2cUmxTOHBXZNXHmvx9xpAN_ZFY3EKMH8d_VLiITIlyrhHaV1lvOg/exec";
 
 const PASS_THRESHOLD = 60;
 const AUTO_PASS_ATTEMPT_COUNT = 5;
@@ -518,14 +521,13 @@ const saveXp = async ({ studentName, className, sessionId, earnedXp, result }) =
   const { currentXp, rowIndex } = await fetchStudentXp(studentName, className);
   const nextXp = currentXp + earnedXp;
   const payload = {
-    student_name: studentName,
     class_name: className,
-    session_id: sessionId,
+    student_name: studentName,
     earned_xp: earnedXp,
+    session_id: sessionId,
     previous_xp: currentXp,
     next_xp: nextXp,
     row_index: rowIndex,
-    result,
   };
 
   if (!XP_UPDATE_ENDPOINT) {
@@ -538,6 +540,35 @@ const saveXp = async ({ studentName, className, sessionId, earnedXp, result }) =
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload),
   });
+
+  const statsPayloads = [
+    { type: "t1", result: result.parts.part1 },
+    { type: "t2-repeat", result: result.parts.part2 },
+    { type: "t2-translate", result: result.parts.part3 },
+  ].map((item) => ({
+    class_name: className,
+    student_name: studentName,
+    type: item.type,
+    total_cards: item.result.totalCards,
+    success_cards: item.result.successCards,
+    failed_cards: item.result.failedCards,
+    total_attempts: item.result.totalAttempts,
+    card_average_rate: item.result.averageScore,
+    overall_average_rate: result.overallAverage,
+    final_score: item.result.finalScore,
+    earned_xp: item.type === "t2-translate" ? earnedXp : 0,
+  }));
+
+  await Promise.all(
+    statsPayloads.map(async (statsPayload) => {
+      await fetch(STATS_UPDATE_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(statsPayload),
+      });
+    })
+  );
 
   localStorage.setItem("speakRankPaidSessions", JSON.stringify([...paidSessions, sessionId]));
   return { ok: true, duplicate: false, previousXp: currentXp, nextXp };
@@ -1272,10 +1303,17 @@ function Flashcards() {
             ))}
           </div>
 
-          <div className={`flashcard-xp-status ${xpSaveResult?.ok ? "success" : "failed"}`}>
-            {xpSaveResult?.ok
-              ? "XP 업데이트 성공"
-              : "저장중입니다"}
+          <div className={`flashcard-xp-status ${xpSaveResult?.ok ? "success" : "saving"}`}>
+            {xpSaveResult?.ok ? (
+              "XP 업데이트 성공"
+            ) : (
+              <>
+                <span>저장 중입니다. 화면을 끄지 마세요.</span>
+                <div className="flashcard-save-progress" aria-hidden="true">
+                  <span />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flashcard-review-list">
@@ -1395,7 +1433,7 @@ function Flashcards() {
                 onClick={startListening}
                 disabled={!currentCard || isListening || isSpeaking}
               >
-                {isListening ? "듣는 중" : "말로 배열"}
+                {isListening ? "듣는 중" : currentCard?.lastSpokenText ? "다시 말하기" : "말하기 시작"}
               </button>
               <button
                 className="flashcard-primary-button"
