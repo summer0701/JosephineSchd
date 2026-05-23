@@ -20,6 +20,13 @@
   gap: 28px;
 }
 
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
 .nav-logo {
   font-size: 1.25rem;
   font-weight: 900;
@@ -30,6 +37,25 @@
   align-items: center;
   gap: 10px;
   white-space: nowrap;
+}
+
+.nav-contact-link {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-contact-link:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .nav-logo:hover {
@@ -94,6 +120,11 @@
     font-size: 1.1em;
   }
 
+  .nav-brand {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .nav-menu {
     width: 100%;
     gap: 2px;
@@ -120,6 +151,18 @@
     font-size: 0.9em;
     flex: 1;
     min-width: 120px;
+  }
+
+  .nav-brand {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-contact-link {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.72rem;
   }
 
   .nav-menu {

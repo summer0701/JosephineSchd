@@ -12,9 +12,19 @@ function Navigation() {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        <Link to="/home" className="nav-logo">
-          🌸 조세핀의 다락방
-        </Link>
+        <div className="nav-brand">
+          <Link to="/home" className="nav-logo">
+            🌸 조세핀의 다락방
+          </Link>
+          <a
+            className="nav-contact-link"
+            href="https://open.kakao.com/o/grBdxkwi"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            오픈 채팅으로 문의하기
+          </a>
+        </div>
 
         <ul className="nav-menu">
           <li className="nav-item">
