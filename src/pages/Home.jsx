@@ -143,6 +143,36 @@ const getRecognitionErrorMessage = (errorCode) => {
   return messages[errorCode] || `음성을 인식하지 못했습니다. 오류: ${errorCode || "알 수 없음"}`;
 };
 
+const playTextToSpeech = (text, setIsPlayingTTS) => {
+  if (!window.speechSynthesis) {
+    console.error("Text-to-Speech not supported");
+    return;
+  }
+
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+  
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 0.9; // Slightly slower for clarity
+  utterance.pitch = 1.0;
+  utterance.volume = 1.0;
+
+  utterance.onstart = () => {
+    setIsPlayingTTS(true);
+  };
+
+  utterance.onend = () => {
+    setIsPlayingTTS(false);
+  };
+
+  utterance.onerror = () => {
+    setIsPlayingTTS(false);
+  };
+
+  window.speechSynthesis.speak(utterance);
+};
+
 function Home() {
   const navigate = useNavigate();
   const recognitionRef = useRef(null);
@@ -165,6 +195,7 @@ function Home() {
   const [score, setScore] = useState(null);
   const [scores, setScores] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isPlayingTTS, setIsPlayingTTS] = useState(false);
 
   const currentSentence = useMemo(() => {
     return sentences[currentIndex] || "";
@@ -245,6 +276,9 @@ function Home() {
       }
       if (audioUrlRef.current) {
         URL.revokeObjectURL(audioUrlRef.current);
+      }
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
       }
     };
   }, []);
@@ -569,6 +603,18 @@ function Home() {
           <div className="stt-row stt-target">
             <span>정답</span>
             <p>{isLoading ? "문장을 불러오는 중입니다." : currentSentence}</p>
+            {!isLoading && currentSentence && (
+              <button
+                className="stt-listen-button"
+                type="button"
+                onClick={() => playTextToSpeech(currentSentence, setIsPlayingTTS)}
+                disabled={isPlayingTTS}
+                title="영어 문장 듣기"
+              >
+                <span aria-hidden="true">🔊</span>
+                {isPlayingTTS ? "재생 중..." : "듣기"}
+              </button>
+            )}
           </div>
           <div className="stt-row">
             <span>학생이 말한곳</span>
@@ -585,6 +631,17 @@ function Home() {
           >
             <span aria-hidden="true"></span>
             {isListening ? "녹음 중지" : "녹음 시작"}
+          </button>
+
+          <button
+            className="stt-listen-button stt-re-listen"
+            type="button"
+            onClick={() => playTextToSpeech(currentSentence, setIsPlayingTTS)}
+            disabled={isPlayingTTS || isLoading || !currentSentence}
+            title="문장을 다시 들으세요"
+          >
+            <span aria-hidden="true">🔄</span>
+            {isPlayingTTS ? "재생 중..." : "다시 듣기"}
           </button>
 
           <button
