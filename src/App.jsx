@@ -24,6 +24,10 @@ function ProtectedLayout() {
     return <Home />;
   }
 
+  if (location.pathname === "/flashcards") {
+    return <Flashcards />;
+  }
+
   return (
     <div className="app-container">
       <header className="header">
@@ -37,7 +41,6 @@ function ProtectedLayout() {
         <Route path="home" element={<Home />} />
         <Route path="demo-lecture" element={<DemoLecture />} />
         <Route path="materials" element={<Materials />} />
-        <Route path="flashcards" element={<Flashcards />} />
         <Route path="schedule/:scheduleIndex" element={<ScheduleDetail />} />
         <Route path="admin" element={<Admin />} />
       </Routes>

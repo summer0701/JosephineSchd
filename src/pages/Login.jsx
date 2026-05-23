@@ -110,7 +110,7 @@ function Login() {
 
       localStorage.setItem(LOGIN_USER_KEY, matchedUser.name);
       localStorage.setItem(LOGIN_CLASS_KEY, matchedUser.className || "class1");
-      navigate("/home");
+      navigate("/flashcards");
     } catch (error) {
       console.error("로그인 오류:", error);
       setErrorMessage("로그인 정보를 확인할 수 없습니다. 잠시 후 다시 시도해주세요.");

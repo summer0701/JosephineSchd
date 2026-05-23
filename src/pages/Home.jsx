@@ -5,6 +5,8 @@ const LOGIN_USER_KEY = "josephineLoginUser";
 const LOGIN_CLASS_KEY = "josephineLoginClass";
 const SENTENCE_SHEET_ID = "1_JXlTJ-iBaKrxRrGJLf9-KUljk_xiGID3K8uZ2sjcEo";
 const PASS_SCORE = 60;
+const SHEET_CLASS_COLUMN_INDEX = 0;
+const SHEET_SENTENCE_COLUMN_INDEX = 2;
 
 const parseCsv = (csvText) => {
   const rows = [];
@@ -237,8 +239,8 @@ function Home() {
 
         const rows = parseCsv(await response.text());
         const loadedSentences = rows
-          .filter((row) => (row[0] || "").trim() === className)
-          .map((row) => (row[1] || "").trim())
+          .filter((row) => (row[SHEET_CLASS_COLUMN_INDEX] || "").trim() === className)
+          .map((row) => (row[SHEET_SENTENCE_COLUMN_INDEX] || "").trim())
           .filter(Boolean);
 
         setSentences(loadedSentences);
