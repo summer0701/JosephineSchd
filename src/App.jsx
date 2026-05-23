@@ -7,6 +7,7 @@ import Materials from "./pages/Materials";
 import Admin from "./pages/Admin";
 import ScheduleDetail from "./pages/ScheduleDetail";
 import Login from "./pages/Login";
+import Flashcards from "./pages/Flashcards";
 import "./App.css";
 
 const LOGIN_USER_KEY = "josephineLoginUser";
@@ -36,6 +37,7 @@ function ProtectedLayout() {
         <Route path="home" element={<Home />} />
         <Route path="demo-lecture" element={<DemoLecture />} />
         <Route path="materials" element={<Materials />} />
+        <Route path="flashcards" element={<Flashcards />} />
         <Route path="schedule/:scheduleIndex" element={<ScheduleDetail />} />
         <Route path="admin" element={<Admin />} />
       </Routes>

@@ -38,6 +38,14 @@ function Navigation() {
               📚 자료실
             </Link>
           </li>
+          <li className="nav-item">
+            <Link
+              to="/flashcards"
+              className={`nav-link ${isActive("/flashcards")}`}
+            >
+              플래시카드
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>

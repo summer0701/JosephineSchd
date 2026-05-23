@@ -2054,3 +2054,267 @@ body {
     width: 100%;
   }
 }
+
+/* ========== SpeakRank 플래시카드 ========== */
+.flashcard-page {
+  min-height: 100vh;
+  padding: 34px;
+  background: linear-gradient(180deg, #f7fbff 0%, #edf4ff 100%);
+  color: #10233f;
+}
+
+.flashcard-shell {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid #dce7f7;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 48px rgba(40, 80, 130, 0.14);
+}
+
+.flashcard-topline,
+.flashcard-progress {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  color: #65758f;
+  font-weight: 800;
+}
+
+.flashcard-progress {
+  margin: 22px 0 16px;
+}
+
+.flashcard-card {
+  display: grid;
+  min-height: 280px;
+  align-content: center;
+  justify-items: center;
+  gap: 18px;
+  padding: 36px;
+  border: 1px solid #dce7f7;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.flashcard-card.t1 {
+  border-top: 5px solid #2563eb;
+}
+
+.flashcard-card.t2 {
+  border-top: 5px solid #0f9f6e;
+}
+
+.flashcard-type {
+  padding: 7px 12px;
+  border-radius: 6px;
+  background: #eaf2ff;
+  color: #2563eb;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.flashcard-main-text {
+  max-width: 820px;
+  color: #10233f;
+  font-size: clamp(2rem, 5vw, 4.4rem);
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.flashcard-sub-text {
+  color: #65758f;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.flashcard-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0 14px;
+}
+
+.flashcard-primary-button,
+.flashcard-secondary-button {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.flashcard-primary-button {
+  border: 0;
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+}
+
+.flashcard-secondary-button {
+  border: 1px solid #b9c8dd;
+  background: #ffffff;
+  color: #24415f;
+}
+
+.flashcard-primary-button:hover:not(:disabled),
+.flashcard-secondary-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.flashcard-primary-button:disabled,
+.flashcard-secondary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.flashcard-status {
+  min-height: 24px;
+  color: #2563eb;
+  text-align: center;
+  font-weight: 800;
+}
+
+.flashcard-feedback {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f6f9fe;
+  color: #465a75;
+  font-size: 0.86rem;
+}
+
+.flashcard-feedback p {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.flashcard-feedback span {
+  color: #7890ad;
+  font-weight: 900;
+}
+
+.flashcard-results h2 {
+  margin: 18px 0;
+  color: #10233f;
+  font-size: 2.2rem;
+}
+
+.flashcard-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.flashcard-result-grid div {
+  display: grid;
+  gap: 8px;
+  min-height: 92px;
+  padding: 16px;
+  border: 1px solid #dce7f7;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.flashcard-result-grid span {
+  color: #65758f;
+  font-weight: 800;
+}
+
+.flashcard-result-grid strong {
+  color: #2563eb;
+  font-size: 1.6rem;
+}
+
+.flashcard-xp-status {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.flashcard-xp-status.success {
+  background: #e9fbf3;
+  color: #08764f;
+}
+
+.flashcard-xp-status.failed {
+  background: #fff3e8;
+  color: #a75000;
+}
+
+.flashcard-review-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.flashcard-review-item {
+  display: grid;
+  grid-template-columns: 44px 1fr 74px;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border: 1px solid #dce7f7;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.flashcard-review-item span {
+  color: #8093ad;
+  font-weight: 900;
+}
+
+.flashcard-review-item p {
+  overflow-wrap: anywhere;
+}
+
+.flashcard-review-item strong {
+  color: #2563eb;
+  text-align: right;
+}
+
+@media (max-width: 620px) {
+  .flashcard-page {
+    padding: 14px;
+  }
+
+  .flashcard-shell {
+    padding: 18px;
+  }
+
+  .flashcard-topline,
+  .flashcard-progress {
+    flex-direction: column;
+  }
+
+  .flashcard-card {
+    min-height: 240px;
+    padding: 24px 16px;
+  }
+
+  .flashcard-actions button {
+    width: 100%;
+  }
+
+  .flashcard-feedback p,
+  .flashcard-review-item {
+    grid-template-columns: 1fr;
+  }
+
+  .flashcard-review-item strong {
+    text-align: left;
+  }
+}
