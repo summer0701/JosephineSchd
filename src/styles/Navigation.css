@@ -58,6 +58,33 @@
   background: rgba(255, 255, 255, 0.18);
 }
 
+.nav-coin {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 218, 99, 0.42);
+  border-radius: 999px;
+  background: rgba(255, 248, 223, 0.18);
+  color: #fff8df;
+  font-size: 0.86rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.nav-coin span {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe187 0%, #f2b100 100%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.38);
+  color: transparent;
+}
+
 .nav-logo:hover {
   color: #ffffff;
 }
@@ -123,6 +150,7 @@
   .nav-brand {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .nav-menu {
@@ -160,6 +188,12 @@
   }
 
   .nav-contact-link {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+
+  .nav-coin {
     min-height: 30px;
     padding: 0 10px;
     font-size: 0.72rem;
