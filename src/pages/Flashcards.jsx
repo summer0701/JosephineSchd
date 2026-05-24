@@ -547,16 +547,12 @@ const saveXp = async ({ studentName, className, sessionId, earnedXp, result, car
     return { ok: true, duplicate: true, message: "이미 지급된 학습 세션입니다." };
   }
 
-  const { currentXp, rowIndex } = await fetchStudentXp(studentName, className);
+  const { currentXp } = await fetchStudentXp(studentName, className);
   const nextXp = currentXp + earnedXp;
   const payload = {
     class_name: className,
     student_name: studentName,
     earned_xp: earnedXp,
-    session_id: sessionId,
-    previous_xp: currentXp,
-    next_xp: nextXp,
-    row_index: rowIndex,
   };
 
   if (!XP_UPDATE_ENDPOINT) {
@@ -833,6 +829,14 @@ function Flashcards() {
     setXpSaveResult(saveResult);
     if (saveResult.ok && typeof saveResult.nextXp === "number") {
       setStudentCoin(saveResult.nextXp);
+      window.setTimeout(async () => {
+        try {
+          const { currentXp } = await fetchStudentXp(studentName, className);
+          setStudentCoin(currentXp);
+        } catch (error) {
+          console.error("코인 재확인 오류:", error);
+        }
+      }, 1800);
     }
   };
 
