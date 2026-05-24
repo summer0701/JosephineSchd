@@ -176,27 +176,30 @@
   }
 
   .nav-logo {
-    font-size: 0.9em;
-    flex: 1;
-    min-width: 120px;
+    font-size: 0.82em;
+    flex: 0 1 auto;
+    min-width: 0;
+    gap: 4px;
   }
 
   .nav-brand {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 6px;
   }
 
   .nav-contact-link {
     min-height: 30px;
-    padding: 0 10px;
-    font-size: 0.72rem;
+    padding: 0 8px;
+    font-size: 0.66rem;
   }
 
   .nav-coin {
     min-height: 30px;
-    padding: 0 10px;
-    font-size: 0.72rem;
+    padding: 0 8px;
+    font-size: 0.66rem;
+    gap: 5px;
   }
 
   .nav-menu {
