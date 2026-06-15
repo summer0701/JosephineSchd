@@ -2245,6 +2245,26 @@ body {
   overflow-wrap: anywhere;
 }
 
+.flashcard-meaning-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 760px;
+  color: #1d4ed8;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+  line-height: 1.35;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.flashcard-meaning-text span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 0.9rem;
+}
+
 .flashcard-actions {
   display: flex;
   justify-content: center;

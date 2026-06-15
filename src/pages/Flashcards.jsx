@@ -13,7 +13,7 @@ const STATS_UPDATE_ENDPOINT =
   process.env.REACT_APP_STATS_UPDATE_ENDPOINT ||
   "https://script.google.com/macros/s/AKfycbwqRrcibIy_4Qwt6-2cUmxTOHBXZNXHmvx9xpAN_ZFY3EKMH8d_VLiITIlyrhHaV1lvOg/exec";
 
-const PASS_THRESHOLD = 60;
+const PASS_THRESHOLD = 50;
 const AUTO_PASS_ATTEMPT_COUNT = 5;
 const XP_PER_SUCCESS_CARD = 1;
 const XP_BONUSES = [
@@ -64,7 +64,23 @@ const XP_COLUMNS = {
   xp: ["coin", "Coin", "코인", "xp", "XP"],
 };
 
+const getDelimiter = (csvText) => {
+  const firstDataLine = csvText
+    .split(/\r?\n/)
+    .find((line) => line.trim() !== "");
+
+  if (!firstDataLine) {
+    return ",";
+  }
+
+  const tabCount = (firstDataLine.match(/\t/g) || []).length;
+  const commaCount = (firstDataLine.match(/,/g) || []).length;
+
+  return tabCount > commaCount ? "\t" : ",";
+};
+
 const parseCsv = (csvText) => {
+  const delimiter = getDelimiter(csvText);
   const rows = [];
   let row = [];
   let value = "";
@@ -85,7 +101,7 @@ const parseCsv = (csvText) => {
       continue;
     }
 
-    if (char === "," && !inQuotes) {
+    if (char === delimiter && !inQuotes) {
       row.push(value);
       value = "";
       continue;
@@ -1269,7 +1285,7 @@ function Flashcards() {
 
           <div className="flashcard-intro-note">
             <p>각 문제는 음성으로 답변합니다.</p>
-            <p>완벽하지 않아도 괜찮습니다. <strong>60% 이상</strong> 비슷하면 정답으로 인정됩니다.</p>
+            <p>완벽하지 않아도 괜찮습니다. <strong>50% 이상</strong> 비슷하면 정답으로 인정됩니다.</p>
             <p>시험이 끝나면 <strong>총 시도 횟수</strong>, <strong>평균 일치율</strong>, <strong>최종 점수</strong>, <strong>획득 XP</strong>를 보여줍니다.</p>
           </div>
 
@@ -1397,6 +1413,12 @@ function Flashcards() {
               <p className="flashcard-main-text">
                 {getCardDisplayText(currentCard)}
               </p>
+              {currentCard.phase === "t1" && currentCard.korean && (
+                <p className="flashcard-meaning-text">
+                  <span>뜻</span>
+                  {currentCard.korean}
+                </p>
+              )}
               {currentCard.pronunciationGuide && (
                 <p className="flashcard-guide-text">{currentCard.pronunciationGuide}</p>
               )}
@@ -1531,6 +1553,9 @@ function Flashcards() {
           <div className="flashcard-feedback">
             {currentCard.phase === "t1" ? (
               <>
+                {currentCard.korean && (
+                  <p><span>Meaning</span>{currentCard.korean}</p>
+                )}
                 <p><span>원문 문장</span>{currentCard.english}</p>
                 {currentCard.pronunciationGuide && (
                   <p><span>발음 가이드</span>{currentCard.pronunciationGuide}</p>
