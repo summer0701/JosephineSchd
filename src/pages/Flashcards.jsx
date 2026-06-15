@@ -759,7 +759,7 @@ function Flashcards() {
       () => {
         pendingInitialTtsCardIdRef.current = "";
         setIsSpeaking(false);
-        window.setTimeout(() => startListening({ isAutoStart: true }), 250);
+        window.setTimeout(() => startListening({ isAutoStart: true }), 500);
       }
     );
   }, [currentCard?.id, currentCard, hasStarted, partCheckpoint, isCompleted]);
@@ -782,7 +782,7 @@ function Flashcards() {
 
     const timer = window.setTimeout(() => {
       startListening({ isAutoStart: true });
-    }, 450);
+    }, 700);
 
     return () => {
       window.clearTimeout(timer);
@@ -1057,8 +1057,7 @@ function Flashcards() {
     recognition.continuous = false;
 
     recognition.onstart = () => {
-      setIsListening(true);
-      setStatusMessage("녹음이 시작되었습니다. 시작하세요.");
+      setStatusMessage("지금 말하세요.");
     };
 
     recognition.onresult = (event) => {
@@ -1096,6 +1095,8 @@ function Flashcards() {
     };
 
     recognitionRef.current = recognition;
+    setIsListening(true);
+    setStatusMessage("마이크를 준비하는 중입니다. '지금 말하세요'가 뜬 뒤 말해주세요.");
     recognition.start();
   };
 
