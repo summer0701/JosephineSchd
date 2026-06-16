@@ -11,6 +11,55 @@ body {
   padding: 0;
 }
 
+.kakao-browser-prompt {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: min(900px, calc(100% - 24px));
+  margin: 12px auto 0;
+  padding: 14px 16px;
+  border: 1px solid #f1d067;
+  border-radius: 8px;
+  background: #fff8df;
+  box-shadow: 0 10px 24px rgba(40, 35, 15, 0.12);
+  color: #3f3210;
+}
+
+.kakao-browser-prompt strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+}
+
+.kakao-browser-prompt p {
+  color: #6b5518;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.kakao-browser-prompt button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.kakao-browser-prompt span {
+  grid-column: 1 / -1;
+  color: #08764f;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 .app-container {
   max-width: 900px;
   margin: 20px auto;
@@ -328,6 +377,15 @@ body {
 }
 
 @media (max-width: 480px) {
+  .kakao-browser-prompt {
+    grid-template-columns: 1fr;
+    width: min(100% - 20px, 100%);
+  }
+
+  .kakao-browser-prompt button {
+    width: 100%;
+  }
+
   .header {
     padding: 40px 20px;
   }

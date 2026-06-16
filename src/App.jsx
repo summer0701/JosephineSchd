@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import KakaoBrowserPrompt from "./components/KakaoBrowserPrompt";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import DemoLecture from "./pages/DemoLecture";
@@ -81,6 +82,7 @@ function ProtectedLayout() {
 function App() {
   return (
     <Router basename="/JosephineSchd">
+      <KakaoBrowserPrompt />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/*" element={<ProtectedLayout />} />
