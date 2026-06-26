@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      (function () {
+        var basePath = "/JosephineSchd";
+        var path = window.location.pathname;
+        var route = path.indexOf(basePath) === 0 ? path.slice(basePath.length) : path;
+        var search = window.location.search || "";
+        var hash = window.location.hash || "";
+
+        window.location.replace(basePath + "/?" + route + search + hash);
+      })();
+    </script>
+    <title>조세핀의 다락방</title>
+  </head>
+  <body></body>
+</html>

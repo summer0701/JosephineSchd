@@ -8,6 +8,23 @@
       name="description"
       content="조세핀의 다락방 - 소중한 일상과 추억을 담는 공간"
     />
+    <script>
+      (function () {
+        var redirectPath = window.location.search.slice(1);
+
+        if (!redirectPath || redirectPath.charAt(0) !== "/") {
+          return;
+        }
+
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname.replace(/\/$/, "") +
+            redirectPath +
+            window.location.hash
+        );
+      })();
+    </script>
     <title>조세핀의 다락방</title>
   </head>
   <body>
