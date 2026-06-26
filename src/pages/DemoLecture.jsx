@@ -1,14 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function DemoLecture() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    lectureName: "",
     preferredDate: "",
     preferredTime: "",
     message: "",
   });
+
+  const [lectures, setLectures] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Google Sheets에서 강의 목록 가져오기
+  useEffect(() => {
+    const fetchLectures = async () => {
+      try {
+        const sheetId = "1yjHT2YkaiJmB78mdouPPGSZDmEXCIdReZUtrzhO32Ww";
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq`;
+
+        const response = await fetch(url);
+        const text = await response.text();
+
+        // Google Visualization API 응답 파싱
+        const jsonStr = text.match(/\(({.*})\)/)[1];
+        const data = JSON.parse(jsonStr);
+
+        if (data.table && data.table.rows) {
+          const lectureList = data.table.rows
+            .slice(1) // 헤더 제외
+            .map((row) => row.c[0]?.v || "")
+            .filter((lecture) => lecture); // 빈 값 제외
+
+          setLectures(lectureList);
+        }
+      } catch (error) {
+        console.error("강의 목록 로드 오류:", error);
+      }
+    };
+
+    fetchLectures();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,19 +56,40 @@ function DemoLecture() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("신청이 완료되었습니다!\n담당자가 곧 연락드리겠습니다.");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      preferredDate: "",
-      preferredTime: "",
-      message: "",
-    });
+    setIsLoading(true);
+
+    // Google Apps Script로 데이터 전송
+    const scriptUrl =
+      "https://script.google.com/macros/s/AKfycbxkpKjQDzJlq37QPwagm_lowRo_itoBMOuFi62O6CBdOyS5bt_ijkOtwlgobppIkm2bhg/exec";
+
+    fetch(scriptUrl, {
+      method: "POST",
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        alert("신청이 완료되었습니다!\n담당자가 곧 연락드리겠습니다.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          lectureName: "",
+          preferredDate: "",
+          preferredTime: "",
+          message: "",
+        });
+        setIsLoading(false);
+        // 홈으로 이동
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("오류:", error);
+        alert("신청 중 오류가 발생했습니다. 다시 시도해주세요.");
+        setIsLoading(false);
+      });
   };
 
   return (
-    <main className="main-content">
+    <main className="main-content demo-page">
       <div className="page-header">
         <h2>🎤 데모강의 신청</h2>
         <p>아래 양식을 작성하여 데모강의를 신청해주세요.</p>
@@ -80,6 +137,24 @@ function DemoLecture() {
           </div>
 
           <div className="form-group">
+            <label htmlFor="lectureName">강의 선택 *</label>
+            <select
+              id="lectureName"
+              name="lectureName"
+              value={formData.lectureName}
+              onChange={handleChange}
+              required
+            >
+              <option value="">강의를 선택하세요</option>
+              {lectures.map((lecture, index) => (
+                <option key={index} value={lecture}>
+                  {lecture}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
             <label htmlFor="preferredDate">신청 희망날짜 *</label>
             <input
               type="date"
@@ -124,8 +199,8 @@ function DemoLecture() {
             />
           </div>
 
-          <button type="submit" className="submit-btn">
-            신청하기
+          <button type="submit" className="submit-btn" disabled={isLoading}>
+            {isLoading ? "잠시만 기다려 주세요" : "신청하기"}
           </button>
         </form>
       </div>

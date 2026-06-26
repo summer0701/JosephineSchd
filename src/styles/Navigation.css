@@ -1,47 +1,102 @@
 /* ========== 네비게이션 바 ========== */
 .navbar {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1),
-    rgba(118, 75, 162, 0.1)
-  );
-  padding: 15px 0;
-  border-bottom: 3px solid #667eea;
-  sticky: top;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(105deg, #2f63f1 0%, #4e2dbf 100%);
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 34px rgba(38, 49, 120, 0.2);
   z-index: 100;
 }
 
 .nav-container {
-  max-width: 900px;
+  max-width: 1280px;
+  min-height: 78px;
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 34px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 28px;
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
 }
 
 .nav-logo {
-  font-size: 1.3em;
-  font-weight: 700;
-  color: #667eea;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.86);
   text-decoration: none;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
+}
+
+.nav-contact-link {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-contact-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.nav-coin {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 218, 99, 0.42);
+  border-radius: 999px;
+  background: rgba(255, 248, 223, 0.18);
+  color: #fff8df;
+  font-size: 0.86rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.nav-coin span {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe187 0%, #f2b100 100%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.38);
+  color: transparent;
 }
 
 .nav-logo:hover {
-  color: #764ba2;
-  transform: scale(1.05);
+  color: #ffffff;
 }
 
 .nav-menu {
   display: flex;
   list-style: none;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .nav-item {
@@ -49,89 +104,116 @@
 }
 
 .nav-link {
-  color: #667eea;
+  min-height: 44px;
+  color: rgba(255, 255, 255, 0.76);
   text-decoration: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-weight: 900;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
   position: relative;
 }
 
 .nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transition: width 0.3s ease;
+  display: none;
 }
 
 .nav-link:hover {
-  background: rgba(102, 126, 234, 0.15);
-  color: #764ba2;
-}
-
-.nav-link:hover::after {
-  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .nav-link.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.nav-link.active::after {
-  width: 100%;
-  background: white;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 18px rgba(22, 21, 78, 0.14);
+  color: #ffffff;
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .nav-container {
     flex-wrap: wrap;
-    padding: 0 15px;
+    min-height: auto;
+    padding: 14px 15px;
+    gap: 10px;
   }
 
   .nav-logo {
     font-size: 1.1em;
   }
 
+  .nav-brand {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
   .nav-menu {
     width: 100%;
-    gap: 5px;
+    gap: 2px;
     margin-top: 10px;
     justify-content: space-around;
   }
 
   .nav-link {
-    padding: 8px 12px;
-    font-size: 0.95em;
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    gap: 3px;
   }
 }
 
 @media (max-width: 480px) {
   .nav-container {
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 5px;
   }
 
   .nav-logo {
-    font-size: 1em;
+    font-size: 0.82em;
+    flex: 0 1 auto;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .nav-brand {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .nav-contact-link {
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 0.66rem;
+  }
+
+  .nav-coin {
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 0.66rem;
+    gap: 5px;
   }
 
   .nav-menu {
     width: 100%;
-    gap: 3px;
+    gap: 1px;
+    margin-top: 0;
+    flex-wrap: wrap;
   }
 
   .nav-link {
-    padding: 8px 10px;
-    font-size: 0.85em;
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 0.72em;
+    white-space: nowrap;
+    gap: 2px;
   }
 }
