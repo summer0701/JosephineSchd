@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  AUDIO_ACTIONS,
+  buildMaterialSpeechText,
+  canStartAudioAction,
+  getRecordingButtonLabel,
+} from "../utils/materialAudio";
 
 function Materials() {
   const [materials] = useState([
@@ -53,7 +59,19 @@ function Materials() {
   ]);
 
   const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [recordings, setRecordings] = useState({});
+  const [activeAudio, setActiveAudio] = useState({
+    action: AUDIO_ACTIONS.IDLE,
+    materialId: null,
+  });
+  const mediaRecorderRef = useRef(null);
+  const recordedChunksRef = useRef([]);
+  const audioRef = useRef(null);
+  const streamRef = useRef(null);
+  const recordingsRef = useRef({});
+
   const categories = ["전체", "문법", "회화", "발음", "어휘", "리딩", "라이팅"];
+  const isAudioBusy = !canStartAudioAction(activeAudio.action);
 
   const filteredMaterials =
     selectedCategory === "전체"
@@ -72,6 +90,167 @@ function Materials() {
         return "📎";
     }
   };
+
+  const resetActiveAudio = () => {
+    setActiveAudio({ action: AUDIO_ACTIONS.IDLE, materialId: null });
+  };
+
+  const stopTts = () => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
+  const stopRecordingStream = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+  };
+
+  const stopRecordedPlayback = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+  };
+
+  const stopCurrentAudio = () => {
+    stopTts();
+    stopRecordedPlayback();
+
+    if (mediaRecorderRef.current?.state === "recording") {
+      mediaRecorderRef.current.stop();
+    } else {
+      resetActiveAudio();
+    }
+  };
+
+  const handleRecordClick = async (materialId) => {
+    const isCurrentRecording =
+      activeAudio.action === AUDIO_ACTIONS.RECORDING &&
+      activeAudio.materialId === materialId;
+
+    if (isCurrentRecording) {
+      stopCurrentAudio();
+      return;
+    }
+
+    if (isAudioBusy) {
+      alert("TTS 듣기, 녹음, 녹음 듣기는 동시에 사용할 수 없습니다.");
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      alert("이 브라우저에서는 목소리 녹음을 지원하지 않습니다.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+
+      recordedChunksRef.current = [];
+      streamRef.current = stream;
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(recordedChunksRef.current, {
+          type: mediaRecorder.mimeType || "audio/webm",
+        });
+
+        setRecordings((prev) => {
+          if (prev[materialId]) {
+            URL.revokeObjectURL(prev[materialId]);
+          }
+
+          const nextRecordings = {
+            ...prev,
+            [materialId]: URL.createObjectURL(audioBlob),
+          };
+
+          recordingsRef.current = nextRecordings;
+          return nextRecordings;
+        });
+
+        stopRecordingStream();
+        resetActiveAudio();
+      };
+
+      mediaRecorder.start();
+      setActiveAudio({ action: AUDIO_ACTIONS.RECORDING, materialId });
+    } catch (error) {
+      stopRecordingStream();
+      resetActiveAudio();
+      alert("마이크 권한을 확인한 뒤 다시 시도해주세요.");
+    }
+  };
+
+  const handleRecordingPlayback = (materialId) => {
+    if (isAudioBusy) {
+      alert("TTS 듣기, 녹음, 녹음 듣기는 동시에 사용할 수 없습니다.");
+      return;
+    }
+
+    const recordingUrl = recordings[materialId];
+
+    if (!recordingUrl) {
+      return;
+    }
+
+    const audio = new Audio(recordingUrl);
+    audioRef.current = audio;
+    setActiveAudio({ action: AUDIO_ACTIONS.PLAYBACK, materialId });
+
+    audio.onended = resetActiveAudio;
+    audio.onerror = resetActiveAudio;
+    audio.play().catch(() => {
+      resetActiveAudio();
+      alert("녹음 파일을 재생할 수 없습니다.");
+    });
+  };
+
+  const handleTtsClick = (material) => {
+    if (isAudioBusy) {
+      alert("TTS 듣기, 녹음, 녹음 듣기는 동시에 사용할 수 없습니다.");
+      return;
+    }
+
+    if (!("speechSynthesis" in window) || !window.SpeechSynthesisUtterance) {
+      alert("이 브라우저에서는 TTS 듣기를 지원하지 않습니다.");
+      return;
+    }
+
+    const speechText = buildMaterialSpeechText(material);
+
+    if (!speechText) {
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(speechText);
+    utterance.lang = "ko-KR";
+    utterance.onend = resetActiveAudio;
+    utterance.onerror = resetActiveAudio;
+
+    setActiveAudio({ action: AUDIO_ACTIONS.TTS, materialId: material.id });
+    window.speechSynthesis.speak(utterance);
+  };
+
+  useEffect(() => {
+    return () => {
+      stopTts();
+      stopRecordedPlayback();
+      stopRecordingStream();
+      Object.values(recordingsRef.current).forEach((url) =>
+        URL.revokeObjectURL(url)
+      );
+    };
+  }, []);
 
   return (
     <main className="main-content">
@@ -107,6 +286,46 @@ function Materials() {
                 </div>
                 <h3>{material.title}</h3>
                 <p>{material.description}</p>
+                <div className="material-audio-controls">
+                  <button
+                    type="button"
+                    className={`audio-btn record-btn ${
+                      activeAudio.action === AUDIO_ACTIONS.RECORDING &&
+                      activeAudio.materialId === material.id
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() => handleRecordClick(material.id)}
+                    disabled={
+                      isAudioBusy &&
+                      !(
+                        activeAudio.action === AUDIO_ACTIONS.RECORDING &&
+                        activeAudio.materialId === material.id
+                      )
+                    }
+                  >
+                    {getRecordingButtonLabel(
+                      activeAudio.action === AUDIO_ACTIONS.RECORDING &&
+                        activeAudio.materialId === material.id
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    className="audio-btn playback-btn"
+                    onClick={() => handleRecordingPlayback(material.id)}
+                    disabled={!recordings[material.id] || isAudioBusy}
+                  >
+                    ▶️ 녹음 듣기
+                  </button>
+                  <button
+                    type="button"
+                    className="audio-btn tts-btn"
+                    onClick={() => handleTtsClick(material)}
+                    disabled={isAudioBusy}
+                  >
+                    🔊 TTS 듣기
+                  </button>
+                </div>
                 <div className="material-footer">
                   <span className="material-date">
                     📅 {new Date(material.date).toLocaleDateString("ko-KR")}
