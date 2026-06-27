@@ -415,6 +415,24 @@ const playSuccessSound = () => {
   }, 650);
 };
 
+const playRecordingStartSound = () => {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContext) {
+    return;
+  }
+
+  const audioContext = new AudioContext();
+  const now = audioContext.currentTime;
+
+  playTone(audioContext, 523, now, 0.08, 0.1);
+  playTone(audioContext, 659, now + 0.08, 0.12, 0.1);
+
+  window.setTimeout(() => {
+    audioContext.close();
+  }, 350);
+};
+
 const speakEnglish = (text, onUnsupported, onDone) => {
   if (!window.speechSynthesis) {
     onUnsupported();
@@ -1057,6 +1075,7 @@ function Flashcards() {
     recognition.continuous = false;
 
     recognition.onstart = () => {
+      playRecordingStartSound();
       setStatusMessage("지금 말하세요.");
     };
 
